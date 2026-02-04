@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge Class Newsletter</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        line-height: 1.6;
+        background: #121212;
+        color: #eee;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      /* Header */
+      header {
+        background: #1f1f1f;
+        color: #fff;
+        padding: 20px 40px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      nav .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        font-family: "Roboto Mono", monospace;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+      nav a:hover {
+        color: #4a90e2;
+      }
+
+      /* Sections */
+      section {
+        padding: 60px 20px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* This Week Article */
+      .this-week-article {
+        display: flex;
+        flex-direction: column;
+        background: #1f1f1f;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+        margin-bottom: 60px;
+        transition: transform 0.3s, background 0.3s;
+      }
+      .this-week-article img {
+        width: 100%;
+        object-fit: cover;
+        height: 400px;
+      }
+      .this-week-article-content {
+        padding: 30px 20px;
+      }
+      .this-week-article h3 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+      }
+      .this-week-article p {
+        font-size: 1.1rem;
+        color: #ccc;
+        margin-bottom: 20px;
+      }
+      .this-week-article a {
+        display: inline-block;
+        background: #e74c3c;
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background 0.3s, transform 0.3s;
+      }
+      .this-week-article a:hover {
+        background: #ff5e57;
+        transform: scale(1.05);
+      }
+
+      /* Older Articles Grid */
+      .older-articles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .older-articles.row-layout {
+        display: flex;
+        flex-direction: column;
+      }
+      .older-article-card {
+        background: #1f1f1f;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+        transition: transform 0.3s, background 0.3s;
+        display: flex;
+        flex-direction: column;
+      }
+      .older-article-card:hover {
+        transform: translateY(-5px);
+        background: #2a2a2a;
+      }
+      .older-article-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .older-article-card-content {
+        padding: 20px;
+      }
+      .older-article-card-content h4 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+      }
+      .older-article-card-content p {
+        font-size: 0.95rem;
+        color: #ccc;
+        margin-bottom: 15px;
+      }
+      .older-article-card-content a {
+        display: inline-block;
+        background: #e74c3c;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.3s, transform 0.3s;
+      }
+      .older-article-card-content a:hover {
+        background: #ff5e57;
+        transform: scale(1.05);
+      }
+
+      @media(max-width:768px){
+        .this-week-article img{
+          height: 250px;
+        }
+        .this-week-article-content h3{
+          font-size:1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">Challenge Class</div>
+        <div class="nav-links">
+          <a href="https://challengeprograms.org">Home</a>
+          <a href="">Newsletter</a>
+          <a href="#older">Older Articles</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- This Week's Article -->
+    <section id="thisWeekArticle">
+  <h2 class="section-title">This Week's Article</h2>
+  <div class="this-week-article" id="thisWeekCard">
+    <!-- Content will be injected dynamically -->
+  </div>
+</section>
+
+<script>
+  const thisWeekCard = document.getElementById("thisWeekCard");
+
+  // Link to this week's article
+  const articleLink = "/newsletter/this-week.pdf";
+
+  // Get current day (0=Sun, 1=Mon, ..., 6=Sat)
+  const day = new Date().getDay();
+  const isLive = day === 5 || day === 6 || day === 0; // Fri-Sun
+
+  if (isLive) {
+    // Friday-Sunday: show big red button
+    thisWeekCard.innerHTML = `
+      <div style="display:flex;justify-content:center;align-items:center;padding:60px;">
+        <a href="${articleLink}" target="_blank" style="
+          font-size: 1.5rem;
+          padding: 25px 50px;
+          background: #e74c3c;
+          color: #fff;
+          border-radius: 12px;
+          text-decoration: none;
+          font-weight: 700;
+          transition: background 0.3s, transform 0.3s;
+        " 
+          onmouseover="this.style.background='#ff5e57'; this.style.transform='scale(1.05)';" 
+          onmouseout="this.style.background='#e74c3c'; this.style.transform='scale(1)';"
+        >Read This Week's Article</a>
+      </div>
+    `;
+  } else {
+    // Mon-Thu: blurred text with fade-in animation
+    thisWeekCard.innerHTML = `
+      <div class="this-week-article-content" style="text-align:center; padding:60px; opacity:0; animation: fadeIn 1s forwards;">
+        <h3 style="color:#ccc; filter: blur(4px); margin-bottom:20px;">Article Coming Friday</h3>
+        <p style="color:#999; filter: blur(4px); margin-bottom:30px;">
+          Stay tuned! This week's newsletter will be available soon.
+        </p>
+        <a href="javascript:void(0)" style="
+          background: #aaa;
+          color: #555;
+          cursor: not-allowed;
+          padding: 18px 40px;
+          border-radius: 10px;
+          font-weight: 700;
+          text-decoration: none;
+        ">Coming Soon</a>
+      </div>
+    `;
+  }
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+
+    <!-- Older Articles -->
+    <section id="older">
+      <h2 class="section-title">Older Articles</h2>
+      <div class="older-articles" id="olderArticlesList">
+        <!-- JS will populate older articles here -->
+      </div>
+    </section>
+
+    <script>
+      // Example older articles
+      const olderArticles = [
+            {
+          title: "Kyden Becomes Terrorist?",
+          description: "Published Week of 1/26",
+          link: "https://github.com/sqscripter/challenge-photosfortheweb/blob/main/Newsletter%20Week%20of%201_26%20(1).pdf?raw=true"
+        },         
+        {
+          title: "BREAKING NEW, final words recovered",
+          description: "Published Week of 1/7",
+          link: "https://github.com/sqscripter/challenge-photosfortheweb/blob/main/Newsletter%20Week%20of%201_7.pdf?raw=true"
+        },
+        {
+          title: "Winter Edition 🎅🎄",
+          description: "Published Week of 12/15",
+          link: "https://github.com/sqscripter/challenge-photosfortheweb/blob/main/Newsletter%20Week%20of%2012_15%20(Holiday%20Edition).pdf?raw=true"
+        },
+        {
+          title: "The END of Hugs?",
+          description: "Published week of 12/8",
+          link: "https://github.com/sqscripter/challenge-photosfortheweb/blob/main/Newsletter%20Week%20of%2012_8.pdf?raw=true"
+        },
+        {
+          title: "How We Celebrate Achievements",
+          description: "Published 12/1 week",
+         link: "https://github.com/sqscripter/challenge-photosfortheweb/blob/main/Challenge%20Newsletter%2012_1.pdf?raw=true"
+        }
+      ];
+
+      const olderArticlesList = document.getElementById("olderArticlesList");
+
+      olderArticles.forEach(article => {
+        const div = document.createElement("div");
+        div.className = "older-article-card";
+        div.innerHTML = `
+          <div class="older-article-card-content">
+            <h4>${article.title}</h4>
+            <p>${article.description}</p>
+            <a href="${article.link}" target="_blank">Read Article</a>
+          </div>
+        `;
+        olderArticlesList.appendChild(div);
+      });
+
+      // Optional: toggle between grid and rows
+      // olderArticlesList.classList.add('row-layout'); // uncomment to switch to rows
+    </script>
+  </body>
+</html>
